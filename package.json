@@ -20,7 +20,7 @@
     "url": "https://github.com/colyseus/create-colyseus/issues"
   },
   "homepage": "https://github.com/colyseus/create-colyseus#readme",
-  "devDependencies": {
+  "dependencies": {
     "@colyseus/loadtest": "^0.14.4",
     "@colyseus/testing": "^0.14.21",
     "@types/cors": "^2.8.6",
@@ -29,9 +29,7 @@
     "copyfiles": "^2.4.1",
     "mocha": "^9.0.2",
     "rimraf": "^2.7.1",
-    "typescript": "^3.4.5"
-  },
-  "dependencies": {
+    "typescript": "^3.4.5",
     "@colyseus/arena": "^0.14.22",
     "@colyseus/monitor": "^0.14.20",
     "colyseus": "^0.14.20",
