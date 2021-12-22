@@ -13,6 +13,9 @@
   },
   "author": "",
   "license": "UNLICENSED",
+  "engines": {
+    "node": "14.x"
+  },
   "bugs": {
     "url": "https://github.com/colyseus/create-colyseus/issues"
   },
