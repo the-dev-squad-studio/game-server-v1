@@ -6,8 +6,10 @@
   "main": "./COMPILED_SERVER/index.js",
   "scripts": {
     "start": "node ./COMPILED_SERVER/index.js",
+    "loadtest": "",
     "build": "",
     "clean": "",
+    "test": ""
   },
   "author": "",
   "license": "UNLICENSED",
