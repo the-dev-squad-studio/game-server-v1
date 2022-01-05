@@ -27,17 +27,17 @@ class GameRoomState extends schema_1.Schema {
     constructor() {
         super(...arguments);
         this.gameData = new GameRoomData();
-        this.playerDatas = new schema_1.MapSchema();
         this.playerStates = new schema_1.MapSchema();
+        this.playerDatas = new schema_1.MapSchema();
     }
 }
 __decorate([
     (0, schema_1.type)(GameRoomData)
 ], GameRoomState.prototype, "gameData", void 0);
 __decorate([
+    (0, schema_1.type)({ map: "string" })
+], GameRoomState.prototype, "playerStates", void 0);
+__decorate([
     (0, schema_1.type)({ map: GamePlayer_1.GamePlayerData })
 ], GameRoomState.prototype, "playerDatas", void 0);
-__decorate([
-    (0, schema_1.type)({ map: GamePlayer_1.GamePlayerState })
-], GameRoomState.prototype, "playerStates", void 0);
 exports.GameRoomState = GameRoomState;

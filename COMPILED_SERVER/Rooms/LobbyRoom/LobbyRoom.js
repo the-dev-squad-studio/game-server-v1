@@ -10,6 +10,7 @@ const LobbyRoomManager_1 = require("../../Global/LobbyRoomManager");
 const StartGameComponent_1 = require("./StartGameComponent");
 class NewLobbyRoom extends colyseus_1.Room {
     onCreate(options) {
+        this.setPatchRate(10);
         this.setState(new LobbyRoomState_1.LobbyRoomState());
         LobbyRoomManager_1.LobbyRoomManager.AddRoom(this);
         this.netMessageSystem = new NETMessageSystem_1.NETMessageSystem(this);

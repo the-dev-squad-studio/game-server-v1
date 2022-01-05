@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LobbyPlayer = void 0;
 const schema_1 = require("@colyseus/schema");
-const type = schema_1.Context.create();
 class LobbyPlayer extends schema_1.Schema {
     constructor() {
         super(...arguments);
@@ -19,15 +18,15 @@ class LobbyPlayer extends schema_1.Schema {
     }
 }
 __decorate([
-    type("string")
+    (0, schema_1.type)("string")
 ], LobbyPlayer.prototype, "playerID", void 0);
 __decorate([
-    type("string")
+    (0, schema_1.type)("string")
 ], LobbyPlayer.prototype, "playerName", void 0);
 __decorate([
-    type("string")
+    (0, schema_1.type)("string")
 ], LobbyPlayer.prototype, "playerColor", void 0);
 __decorate([
-    type("boolean")
+    (0, schema_1.type)("boolean")
 ], LobbyPlayer.prototype, "isReady", void 0);
 exports.LobbyPlayer = LobbyPlayer;

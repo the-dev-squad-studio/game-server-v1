@@ -19,9 +19,7 @@ class GameRoom extends colyseus_1.Room {
         playerData.playerName = options.playerName;
         playerData.playerColor = options.playerColor;
         this.state.playerDatas.set(client.sessionId, playerData);
-        let playerState = new GamePlayer_1.GamePlayerState();
-        playerState.id = client.id;
-        this.state.playerStates.set(client.sessionId, playerState);
+        //this.state.playerStates.set(client.sessionId, "");
     }
     onLeave(client, consented) {
         console.log(client.sessionId, "left!");
