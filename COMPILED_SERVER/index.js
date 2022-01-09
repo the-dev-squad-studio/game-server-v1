@@ -15,6 +15,12 @@ const GameRoom_1 = require("./Rooms/GameRoom/GameRoom");
 const monitor_1 = require("@colyseus/monitor");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.get("/", (req, res) => {
+    res.send(Math.round(process.uptime()) + "");
+});
+app.get("/alive", (req, res) => {
+    res.send("true");
+});
 app.use("/colyseus", (0, monitor_1.monitor)());
 app.get("/get_lobbyroom", (req, res) => {
     res.send(LobbyRoomManager_1.LobbyRoomManager.GetJoinableLobbyRoomID());
