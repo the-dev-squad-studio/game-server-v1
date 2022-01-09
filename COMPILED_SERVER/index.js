@@ -32,8 +32,7 @@ const server = (0, http_1.createServer)(app); // create the http server manually
 exports.gameServer = new core_1.Server({
     transport: new ws_transport_1.WebSocketTransport({
         server // provide the custom server for `WebSocketTransport`
-    }),
-    pingInterval: 10
+    })
 });
 exports.gameServer.define("lobbyroom", LobbyRoom_1.NewLobbyRoom);
 exports.gameServer.define("gameroom", GameRoom_1.GameRoom);

@@ -8,6 +8,7 @@ const GameRoomState_1 = require("../../States/GameRoomState/GameRoomState");
 const SyncPlayerStateComponent_1 = require("./SyncPlayerStateComponent");
 class GameRoom extends colyseus_1.Room {
     onCreate(options) {
+        this.setPatchRate(10);
         this.setState(new GameRoomState_1.GameRoomState());
         this.netMessageSystem = new NETMessageSystem_1.NETMessageSystem(this);
         new SyncPlayerStateComponent_1.SyncPlayerComponent(this, this.netMessageSystem);
