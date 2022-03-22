@@ -10,22 +10,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StartGameComponent = void 0;
+const LobbyRoom_1 = require("./LobbyRoom");
 class StartGameComponent {
     constructor(room, netMessageSystem) {
         netMessageSystem.OnMessage("START_GAME", (clientMessage) => __awaiter(this, void 0, void 0, function* () {
             let seed = (room.state.lobbyData.seed == 0) ? this.GetRandomSeed() : room.state.lobbyData.seed;
             let gameTime = room.state.lobbyData.gameTime;
-            //const newGameRoom = await matchMaker.createRoom("gameroom", { mode: "duo" });            
+            //const newGameRoom = await matchMaker.createRoom("gameroom", { mode: "duo" });       
+            room.state.lobbyData.gameStarted = true;
+            LobbyRoom_1.NewLobbyRoom.UpdateJoinable(room);
             room.broadcast("START_GAME", {
                 seed: seed,
                 gameTime: gameTime,
                 gamrRoomID: clientMessage.message
             });
         }));
+        netMessageSystem.OnMessage("GAME_FINISH", (clientMessage) => __awaiter(this, void 0, void 0, function* () {
+            room.state.lobbyData.gameStarted = false;
+            LobbyRoom_1.NewLobbyRoom.UpdateJoinable(room);
+        }));
     }
     GetRandomSeed() {
-        let seedRange = 9999999;
-        return this.GetRandomInt(-seedRange, seedRange);
+        let seedRange = 2147483647;
+        //return this.GetRandomInt(-seedRange, seedRange);
+        return 55555;
     }
     GetRandomInt(min, max) {
         min = Math.ceil(min);

@@ -13,6 +13,10 @@ class LobbyDataComponent {
             room.state.lobbyData.isPublic = clientMessage.message;
             LobbyRoom_1.NewLobbyRoom.UpdateJoinable(room);
         });
+        netMessageSystem.OnMessage("SET_ISLAND_TYPE", (clientMessage) => {
+            room.state.lobbyData.islandTypeIndex = clientMessage.message;
+            LobbyRoom_1.NewLobbyRoom.UpdateJoinable(room);
+        });
     }
 }
 exports.LobbyDataComponent = LobbyDataComponent;

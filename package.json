@@ -3,13 +3,14 @@
   "name": "my-app",
   "version": "1.0.0",
   "description": "npm init template for bootstrapping an empty Colyseus project",
-  "main": "./COMPILED_SERVER/index.js",
+  "main": "./COMPILED_SERVER/arena.config.js",
   "scripts": {
-    "start": "node ./COMPILED_SERVER/index.js",
+    "start": "node ./COMPILED_SERVER/arena.config.js",
     "loadtest": "",
     "build": "",
     "clean": "",
-    "test": ""
+    "test": "",
+    "gen": "node ./States/GENERATE_SCHEMA.js"
   },
   "author": "",
   "license": "UNLICENSED",

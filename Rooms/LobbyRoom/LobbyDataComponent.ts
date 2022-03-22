@@ -4,6 +4,7 @@ import { NETMessageSystem } from "../../Global/NETMessageSystem";
 import { LobbyRoomState } from "../../States/LobbyRoomState/LobbyRoomState";
 import { NewLobbyRoom } from "./LobbyRoom";
 
+
 export class LobbyDataComponent{
     constructor(room:Room<LobbyRoomState>, netMessageSystem:NETMessageSystem){
         netMessageSystem.OnMessage("SET_GAME_TIME", (clientMessage:IClientMessage)=>{ room.state.lobbyData.gameTime = clientMessage.message; })
@@ -15,5 +16,10 @@ export class LobbyDataComponent{
             room.state.lobbyData.isPublic = clientMessage.message; 
             NewLobbyRoom.UpdateJoinable(room);            
         })
+        netMessageSystem.OnMessage("SET_ISLAND_TYPE", (clientMessage:IClientMessage)=>{ 
+            room.state.lobbyData.islandTypeIndex = clientMessage.message; 
+            NewLobbyRoom.UpdateJoinable(room);            
+        })
     }
 }
+

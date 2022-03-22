@@ -17,4 +17,32 @@ export class LobbyRoomManager{
         });
         return id;
     }
+    static GetRoomList():string{
+        let ids:RoomData[] = []
+        this.lobbyRooms.forEach((value:NewLobbyRoom, key) => {
+            if(ids.length > 20) return;
+            if(value.state.lobbyData.joinable) ids.push({
+                roomName: value.state.lobbyData.hostName,
+                roomID: key,
+                mapIndex: 0,
+                currentPlayerCount: value.state.players.size,
+                maxPlayerCount: value.state.lobbyData.maxPlayer,
+                gameTime: value.state.lobbyData.gameTime
+            })
+        });
+        let result = ""
+        for(let i in ids){
+            result += JSON.stringify(ids[i]) + ";"
+        }
+        return result;
+    }
+}
+
+export interface RoomData {
+    roomName: string;
+    roomID: string;
+    mapIndex: number;
+    currentPlayerCount: number;
+    maxPlayerCount: number;
+    gameTime: number;
 }

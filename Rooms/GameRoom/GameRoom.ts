@@ -1,31 +1,63 @@
 import { Client, Room } from "colyseus";
 import { IClientMessage } from "../../Global/GameRoomInterfaces";
 import { NETMessageSystem } from "../../Global/NETMessageSystem";
-import { GamePlayerData, GamePlayerState } from "../../States/GameRoomState/GamePlayer";
+import { GamePlayerData } from "../../States/GameRoomState/GamePlayer";
 import { GameRoomState } from "../../States/GameRoomState/GameRoomState";
+import { StartGameComponent } from "../LobbyRoom/StartGameComponent";
+import { GameDropItemSync } from "./GameDropItemSync";
+import { StartGameRoomGameComponent } from "./StartGameComponent";
+import { SyncPlayerGameData } from "./SyncPlayerGameData";
 import { SyncPlayerComponent } from "./SyncPlayerStateComponent";
 
 export class GameRoom extends Room<GameRoomState>{
     netMessageSystem:NETMessageSystem;
-    onCreate (options: any) {
+    onCreate (options: {playerName:string, playerColor:string, maxHealth:number, gameTime:number}) {
+        this.setPatchRate(10);
         this.setState(new GameRoomState());
+        this.state.gameData.gameTime = options.gameTime;
         this.netMessageSystem = new NETMessageSystem(this);
         new SyncPlayerComponent(this, this.netMessageSystem);
+        new StartGameRoomGameComponent(this, this.netMessageSystem);
+        new SyncPlayerGameData(this, this.netMessageSystem);
+        new GameDropItemSync(this, this.netMessageSystem);
 
         this.netMessageSystem.OnMessage("PING", (clientMessage:IClientMessage)=>{clientMessage.client.send("PING", "")});
+        this.onMessage("SET_WEAPON_INDEX", (client:Client, message:number)=>{
+            this.state.playerDatas.get(client.sessionId).weaponIndex = message
+        })
+        this.onMessage("PICKUP_ITEM", (client:Client, message:string)=>{
+            this.broadcast("PICKUP_ITEM", message);            
+        });
+        this.onMessage("SHOOT", (client:Client, message:string)=>{
+            this.broadcast("SHOOT", message);            
+        });
+        this.onMessage("SHOOTING_MODE_ON", (client:Client, message:string)=>{
+            this.state.playerDatas.get(client.sessionId).isOnShootingMode = true;       
+        });
+        this.onMessage("SHOOTING_MODE_OFF", (client:Client, message:string)=>{
+            this.state.playerDatas.get(client.sessionId).isOnShootingMode = false;       
+        });
+        this.onMessage("CRATE_OPEN", (client:Client, message:string)=>{
+            this.broadcast("CRATE_OPEN", message);
+        });
+        this.onMessage("CRATE_ITEM_CONSUME", (client:Client, message:string)=>{
+            this.broadcast("CRATE_ITEM_CONSUME", message);
+        });
     }
 
-    onJoin (client: Client, options: {playerName:string, playerColor:string}) {
+    onJoin (client: Client, options: {playerName:string, playerColor:string, maxHealth:number, playerLevel:number}) {
         console.log(client.sessionId, "joined!");
 
         let playerData = new GamePlayerData();
         playerData.playerName = options.playerName;
+        playerData.playerID = client.sessionId;
+        playerData.playerLevel = options.playerLevel;
+        playerData.maxHealth = options.maxHealth;
+        playerData.playerHealth = options.maxHealth;
         playerData.playerColor = options.playerColor;
         this.state.playerDatas.set(client.sessionId, playerData);
         
-        let playerState = new GamePlayerState();
-        playerState.id = client.id;
-        this.state.playerStates.set(client.sessionId, playerState);
+        //this.state.playerStates.set(client.sessionId, "");
     }
 
     onLeave (client: Client, consented: boolean) {

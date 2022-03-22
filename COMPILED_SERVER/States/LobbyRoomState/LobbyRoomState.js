@@ -14,8 +14,11 @@ class LobbyRoomData extends schema_1.Schema {
         super(...arguments);
         this.seed = 0;
         this.hostID = "";
+        this.hostName = "";
         this.maxPlayer = 10;
-        this.gameTime = 0;
+        this.gameStarted = false;
+        this.gameTime = 3;
+        this.islandTypeIndex = 0;
         this.isPublic = true;
         this.joinable = true;
     }
@@ -27,11 +30,20 @@ __decorate([
     (0, schema_1.type)("string")
 ], LobbyRoomData.prototype, "hostID", void 0);
 __decorate([
+    (0, schema_1.type)("string")
+], LobbyRoomData.prototype, "hostName", void 0);
+__decorate([
     (0, schema_1.type)("int32")
 ], LobbyRoomData.prototype, "maxPlayer", void 0);
 __decorate([
+    (0, schema_1.type)("boolean")
+], LobbyRoomData.prototype, "gameStarted", void 0);
+__decorate([
     (0, schema_1.type)("int32")
 ], LobbyRoomData.prototype, "gameTime", void 0);
+__decorate([
+    (0, schema_1.type)("int32")
+], LobbyRoomData.prototype, "islandTypeIndex", void 0);
 __decorate([
     (0, schema_1.type)("boolean")
 ], LobbyRoomData.prototype, "isPublic", void 0);

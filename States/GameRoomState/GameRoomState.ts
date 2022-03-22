@@ -1,4 +1,5 @@
 import { Schema, Context, type, MapSchema } from "@colyseus/schema";
+import { number } from "@colyseus/schema/lib/encoding/decode";
 import { GamePlayerData, GamePlayerState } from "./GamePlayer";
 
 export class GameRoomData extends Schema {
@@ -8,6 +9,6 @@ export class GameRoomData extends Schema {
 
 export class GameRoomState extends Schema{
   @type(GameRoomData) gameData = new GameRoomData();
+  @type({map : "string"}) playerStates = new MapSchema<string>();
   @type({ map: GamePlayerData }) playerDatas = new MapSchema<GamePlayerData>();
-  @type({ map: GamePlayerState }) playerStates = new MapSchema<GamePlayerState>();
 }

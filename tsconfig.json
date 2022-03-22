@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./COMPILED_SERVER"
   }
 }

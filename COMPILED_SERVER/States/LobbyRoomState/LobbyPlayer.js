@@ -14,6 +14,7 @@ class LobbyPlayer extends schema_1.Schema {
         this.playerID = "";
         this.playerName = "";
         this.playerColor = "";
+        this.playerLevel = 0;
         this.isReady = false;
     }
 }
@@ -26,6 +27,9 @@ __decorate([
 __decorate([
     (0, schema_1.type)("string")
 ], LobbyPlayer.prototype, "playerColor", void 0);
+__decorate([
+    (0, schema_1.type)("int32")
+], LobbyPlayer.prototype, "playerLevel", void 0);
 __decorate([
     (0, schema_1.type)("boolean")
 ], LobbyPlayer.prototype, "isReady", void 0);
