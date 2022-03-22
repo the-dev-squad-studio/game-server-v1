@@ -42,4 +42,4 @@ gameServer.define("lobbyroom", NewLobbyRoom)
 gameServer.define("gameroom", GameRoom)
 //gameServer.simulateLatency(250)
 
-gameServer.listen(parseInt(process.env.PORT) || 3000).then(()=> console.log("Gameserver listening for connection"));
+gameServer.listen(parseInt(process.env.PORT) || 3001).then(()=> console.log("Gameserver listening for connection"));
