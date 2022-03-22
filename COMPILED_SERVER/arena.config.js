@@ -41,4 +41,4 @@ exports.gameServer = new core_1.Server({
 exports.gameServer.define("lobbyroom", LobbyRoom_1.NewLobbyRoom);
 exports.gameServer.define("gameroom", GameRoom_1.GameRoom);
 //gameServer.simulateLatency(250)
-exports.gameServer.listen(parseInt(process.env.PORT) || 3000).then(() => console.log("Gameserver listening for connection"));
+exports.gameServer.listen(parseInt(process.env.PORT) || 3001).then(() => console.log("Gameserver listening for connection"));
