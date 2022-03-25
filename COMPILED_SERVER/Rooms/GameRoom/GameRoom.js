@@ -16,7 +16,7 @@ class GameRoom extends colyseus_1.Room {
         this.state.gameData.gameTime = options.gameTime;
         this.netMessageSystem = new NETMessageSystem_1.NETMessageSystem(this);
         new SyncPlayerStateComponent_1.SyncPlayerComponent(this, this.netMessageSystem);
-        new StartGameComponent_1.StartGameRoomGameComponent(this, this.netMessageSystem);
+        this.startGameRoomGameComponent = new StartGameComponent_1.StartGameRoomGameComponent(this, this.netMessageSystem);
         new SyncPlayerGameData_1.SyncPlayerGameData(this, this.netMessageSystem);
         new GameDropItemSync_1.GameDropItemSync(this, this.netMessageSystem);
         this.netMessageSystem.OnMessage("PING", (clientMessage) => { clientMessage.client.send("PING", ""); });
@@ -46,6 +46,7 @@ class GameRoom extends colyseus_1.Room {
         console.log(client.sessionId, "joined!");
         let playerData = new GamePlayer_1.GamePlayerData();
         playerData.playerName = options.playerName;
+        playerData.isOnline = true;
         playerData.playerID = client.sessionId;
         playerData.playerLevel = options.playerLevel;
         playerData.maxHealth = options.maxHealth;
@@ -57,10 +58,19 @@ class GameRoom extends colyseus_1.Room {
     onLeave(client, consented) {
         console.log(client.sessionId, "left!");
         //return;
-        if (this.state.playerDatas.has(client.sessionId))
-            this.state.playerDatas.delete(client.sessionId);
-        if (this.state.playerStates.has(client.sessionId))
-            this.state.playerStates.delete(client.sessionId);
+        //if(this.state.playerDatas.has(client.sessionId)) this.state.playerDatas.delete(client.sessionId);
+        //if(this.state.playerStates.has(client.sessionId)) this.state.playerStates.delete(client.sessionId);
+        setTimeout(() => {
+            if (this.state.playerDatas.has(client.sessionId))
+                this.state.playerDatas.get(client.sessionId).isOnline = false;
+            if (this.clients.length <= 1) {
+                if (this.startGameRoomGameComponent.targetTime > 3)
+                    this.startGameRoomGameComponent.targetTime = 3;
+                if (this.clients[0]) {
+                    this.clients[0].send("NOTIFY", "No other player is in the match right now");
+                }
+            }
+        }, consented ? 0 : 10000);
     }
     onDispose() {
         console.log("room", this.roomId, "disposing...");

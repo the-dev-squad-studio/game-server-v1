@@ -1,6 +1,6 @@
 import express from "express";
 import { createServer } from "http";
-import { Server } from "@colyseus/core";
+import { Client, Server } from "@colyseus/core";
 import { WebSocketTransport } from "@colyseus/ws-transport"
 import { NewLobbyRoom } from "./Rooms/LobbyRoom/LobbyRoom";
 import { LobbyRoomManager } from "./Global/LobbyRoomManager";
@@ -9,13 +9,18 @@ import { matchMaker } from "colyseus";
 import { GameRoom } from "./Rooms/GameRoom/GameRoom";
 import { monitor } from "@colyseus/monitor";
 
+let maxPlayerCount = 35
+let ALL_PLAYERS:Map<string, Client> = new Map<string, Client>();
+export {ALL_PLAYERS};
+
 const app = express();
 app.use(express.json());
 app.get("/", (req, res)=>{
   res.send(Math.round(process.uptime()) + "")
 })
 app.get("/alive", (req, res)=>{
-  res.send("true")
+  if(ALL_PLAYERS.size < maxPlayerCount) res.send("true")
+  else res.send("full")
 })
 app.use("/colyseus", monitor());
 
@@ -42,4 +47,4 @@ gameServer.define("lobbyroom", NewLobbyRoom)
 gameServer.define("gameroom", GameRoom)
 //gameServer.simulateLatency(250)
 
-gameServer.listen(parseInt(process.env.PORT) || 3001).then(()=> console.log("Gameserver listening for connection"));
+gameServer.listen(parseInt(process.env.PORT) || 3000).then(()=> console.log("Gameserver listening for connection"));

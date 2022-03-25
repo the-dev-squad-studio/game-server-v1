@@ -5,6 +5,7 @@ export class GamePlayerData extends Schema{
     @type("string") playerName = "";
     @type("string") playerColor = "";
     @type("int32") playerLevel = 0;
+    @type("boolean") isOnline = true;
 
     @type("string") lastDamager = "";
     @type("int32") weaponIndex = -1;

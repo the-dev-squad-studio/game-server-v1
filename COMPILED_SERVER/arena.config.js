@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.gameServer = void 0;
+exports.gameServer = exports.ALL_PLAYERS = void 0;
 const express_1 = __importDefault(require("express"));
 const http_1 = require("http");
 const core_1 = require("@colyseus/core");
@@ -13,13 +13,19 @@ const LobbyRoomManager_1 = require("./Global/LobbyRoomManager");
 const Config_1 = require("./Global/Config");
 const GameRoom_1 = require("./Rooms/GameRoom/GameRoom");
 const monitor_1 = require("@colyseus/monitor");
+let maxPlayerCount = 35;
+let ALL_PLAYERS = new Map();
+exports.ALL_PLAYERS = ALL_PLAYERS;
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.get("/", (req, res) => {
     res.send(Math.round(process.uptime()) + "");
 });
 app.get("/alive", (req, res) => {
-    res.send("true");
+    if (ALL_PLAYERS.size < maxPlayerCount)
+        res.send("true");
+    else
+        res.send("full");
 });
 app.use("/colyseus", (0, monitor_1.monitor)());
 app.get("/get_lobbyroom", (req, res) => {
@@ -41,4 +47,4 @@ exports.gameServer = new core_1.Server({
 exports.gameServer.define("lobbyroom", LobbyRoom_1.NewLobbyRoom);
 exports.gameServer.define("gameroom", GameRoom_1.GameRoom);
 //gameServer.simulateLatency(250)
-exports.gameServer.listen(parseInt(process.env.PORT) || 3001).then(() => console.log("Gameserver listening for connection --]"));
+exports.gameServer.listen(parseInt(process.env.PORT) || 3000).then(() => console.log("Gameserver listening for connection"));

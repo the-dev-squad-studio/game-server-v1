@@ -4,7 +4,7 @@ import { GamePlayerData } from "../../States/GameRoomState/GamePlayer";
 import { GameRoomState } from "../../States/GameRoomState/GameRoomState";
 
 export class StartGameRoomGameComponent{
-    targetTime:number = 0;
+    public targetTime:number = 0;
     constructor(room:Room<GameRoomState>, netMessageSystem:NETMessageSystem){
         this.targetTime = room.state.gameData.gameTime * 60;
         console.log("GAME_TIME INIT")

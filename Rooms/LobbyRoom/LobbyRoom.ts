@@ -6,11 +6,13 @@ import { NETMessageSystem } from "../../Global/NETMessageSystem";
 import { LobbyDataComponent } from "./LobbyDataComponent";
 import { LobbyRoomManager } from "../../Global/LobbyRoomManager";
 import { StartGameComponent } from "./StartGameComponent";
+import { ALL_PLAYERS } from "../../arena.config";
 
 export class NewLobbyRoom extends Room<LobbyRoomState>{
   netMessageSystem:NETMessageSystem;
   onCreate (options: any) {
     this.setPatchRate(10);
+    this.setSeatReservationTime(60)
     this.setState(new LobbyRoomState());
     this.state.lobbyData.gameTime = 5;
     this.state.lobbyData.maxPlayer = 10;
@@ -39,6 +41,8 @@ export class NewLobbyRoom extends Room<LobbyRoomState>{
   onJoin (client: Client, options: {playerName:string, playerColor:string, playerLevel:number}) {
     console.log(client.sessionId, "joined!");
 
+    ALL_PLAYERS.set(client.sessionId, client)
+
     if(this.clients.length <= 1) {
       this.state.lobbyData.hostID = client.sessionId
       this.state.lobbyData.hostName = options.playerName
@@ -61,6 +65,7 @@ export class NewLobbyRoom extends Room<LobbyRoomState>{
       this.state.lobbyData.hostName = (GetFirstItem(this.state.players) as LobbyPlayer).playerName;  
     }
     NewLobbyRoom.UpdateJoinable(this);
+    ALL_PLAYERS.delete(client.sessionId)
     //console.log("###")
     //console.log(GetFirstItem(this.state.players));
   }

@@ -15,6 +15,7 @@ class GamePlayerData extends schema_1.Schema {
         this.playerName = "";
         this.playerColor = "";
         this.playerLevel = 0;
+        this.isOnline = true;
         this.lastDamager = "";
         this.weaponIndex = -1;
         this.isOnShootingMode = false;
@@ -38,6 +39,9 @@ __decorate([
 __decorate([
     (0, schema_1.type)("int32")
 ], GamePlayerData.prototype, "playerLevel", void 0);
+__decorate([
+    (0, schema_1.type)("boolean")
+], GamePlayerData.prototype, "isOnline", void 0);
 __decorate([
     (0, schema_1.type)("string")
 ], GamePlayerData.prototype, "lastDamager", void 0);

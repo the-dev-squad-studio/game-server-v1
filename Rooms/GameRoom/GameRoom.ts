@@ -11,13 +11,14 @@ import { SyncPlayerComponent } from "./SyncPlayerStateComponent";
 
 export class GameRoom extends Room<GameRoomState>{
     netMessageSystem:NETMessageSystem;
+    startGameRoomGameComponent:StartGameRoomGameComponent;
     onCreate (options: {playerName:string, playerColor:string, maxHealth:number, gameTime:number}) {
         this.setPatchRate(10);
         this.setState(new GameRoomState());
         this.state.gameData.gameTime = options.gameTime;
         this.netMessageSystem = new NETMessageSystem(this);
         new SyncPlayerComponent(this, this.netMessageSystem);
-        new StartGameRoomGameComponent(this, this.netMessageSystem);
+        this.startGameRoomGameComponent = new StartGameRoomGameComponent(this, this.netMessageSystem);
         new SyncPlayerGameData(this, this.netMessageSystem);
         new GameDropItemSync(this, this.netMessageSystem);
 
@@ -50,6 +51,7 @@ export class GameRoom extends Room<GameRoomState>{
 
         let playerData = new GamePlayerData();
         playerData.playerName = options.playerName;
+        playerData.isOnline = true;
         playerData.playerID = client.sessionId;
         playerData.playerLevel = options.playerLevel;
         playerData.maxHealth = options.maxHealth;
@@ -63,8 +65,19 @@ export class GameRoom extends Room<GameRoomState>{
     onLeave (client: Client, consented: boolean) {
         console.log(client.sessionId, "left!");
         //return;
-        if(this.state.playerDatas.has(client.sessionId)) this.state.playerDatas.delete(client.sessionId);
-        if(this.state.playerStates.has(client.sessionId)) this.state.playerStates.delete(client.sessionId);
+        //if(this.state.playerDatas.has(client.sessionId)) this.state.playerDatas.delete(client.sessionId);
+        //if(this.state.playerStates.has(client.sessionId)) this.state.playerStates.delete(client.sessionId);
+        
+        setTimeout(() => {
+            if(this.state.playerDatas.has(client.sessionId)) this.state.playerDatas.get(client.sessionId).isOnline = false;
+            if(this.clients.length <= 1){
+                if(this.startGameRoomGameComponent.targetTime > 3) this.startGameRoomGameComponent.targetTime = 3;
+                if(this.clients[0]){
+                    this.clients[0].send("NOTIFY", "No other player is in the match right now");
+                }
+            }
+        }, consented ? 0 : 10000);
+        
     }
 
     onDispose() {

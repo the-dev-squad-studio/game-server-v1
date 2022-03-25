@@ -8,9 +8,11 @@ const NETMessageSystem_1 = require("../../Global/NETMessageSystem");
 const LobbyDataComponent_1 = require("./LobbyDataComponent");
 const LobbyRoomManager_1 = require("../../Global/LobbyRoomManager");
 const StartGameComponent_1 = require("./StartGameComponent");
+const arena_config_1 = require("../../arena.config");
 class NewLobbyRoom extends colyseus_1.Room {
     onCreate(options) {
         this.setPatchRate(10);
+        this.setSeatReservationTime(60);
         this.setState(new LobbyRoomState_1.LobbyRoomState());
         this.state.lobbyData.gameTime = 5;
         this.state.lobbyData.maxPlayer = 10;
@@ -37,6 +39,7 @@ class NewLobbyRoom extends colyseus_1.Room {
     }
     onJoin(client, options) {
         console.log(client.sessionId, "joined!");
+        arena_config_1.ALL_PLAYERS.set(client.sessionId, client);
         if (this.clients.length <= 1) {
             this.state.lobbyData.hostID = client.sessionId;
             this.state.lobbyData.hostName = options.playerName;
@@ -58,6 +61,7 @@ class NewLobbyRoom extends colyseus_1.Room {
             this.state.lobbyData.hostName = GetFirstItem(this.state.players).playerName;
         }
         NewLobbyRoom.UpdateJoinable(this);
+        arena_config_1.ALL_PLAYERS.delete(client.sessionId);
         //console.log("###")
         //console.log(GetFirstItem(this.state.players));
     }
