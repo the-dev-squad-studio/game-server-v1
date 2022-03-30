@@ -2,7 +2,7 @@ import express from "express";
 import expressify from "uwebsockets-express"
 import { createServer } from "http";
 import { Client, Server } from "@colyseus/core";
-//import { WebSocketTransport } from "@colyseus/ws-transport"
+import { WebSocketTransport } from "@colyseus/ws-transport"
 import { uWebSocketsTransport } from "@colyseus/uwebsockets-transport"
 import { NewLobbyRoom } from "./Rooms/LobbyRoom/LobbyRoom";
 import { LobbyRoomManager } from "./Global/LobbyRoomManager";
@@ -14,7 +14,7 @@ import {default as Arena} from "@colyseus/arena"
 import {monitor} from "@colyseus/monitor"
 
 
-module.exports = Arena({
+let ArenaData = {
   getId: () => "Your Colyseus App",
 
   initializeGameServer: (gameServer:Server) => {
@@ -50,4 +50,20 @@ module.exports = Arena({
     console.log("Gameserver started with : " + `MAX_PLAYER_COUNT:${CONFIG.GetMaxPlayerCount()}`)
   }
 
-});
+}
+
+module.exports = Arena(ArenaData);
+
+
+let eApp = express()
+
+let gameserver = new Server({
+  transport: new WebSocketTransport({
+
+  })
+})
+
+ArenaData.initializeExpress(eApp)
+ArenaData.initializeGameServer(gameserver)
+
+if(process.env.NOT_LOCAL != "true") gameserver.listen(parseInt(process.env.PORT) || 3000).then(()=> console.log("Gameserver started with : " + `MAX_PLAYER_COUNT:${CONFIG.GetMaxPlayerCount()}`));
