@@ -1,5 +1,8 @@
 export let CONFIG = {
     maintenance: false,
+    GetMaxPlayerCount():number{
+        return parseInt(process.env.MAX_PLAYER_COUNT) || 25
+    },
     noUserExistCheck: true,
     password: "hello",
     JSON_DBName:"myDB",

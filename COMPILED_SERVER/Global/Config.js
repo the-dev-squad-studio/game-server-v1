@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CONFIG = void 0;
 exports.CONFIG = {
     maintenance: false,
+    GetMaxPlayerCount() {
+        return parseInt(process.env.MAX_PLAYER_COUNT) || 25;
+    },
     noUserExistCheck: true,
     password: "hello",
     JSON_DBName: "myDB",
