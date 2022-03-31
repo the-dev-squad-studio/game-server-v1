@@ -1,7 +1,7 @@
 export let CONFIG = {
     maintenance: false,
     GetMaxPlayerCount():number{
-        return parseInt(process.env.MAX_PLAYER_COUNT) || 25
+        return parseInt(process.env.MAX_PLAYER_COUNT) || 500
     },
     noUserExistCheck: true,
     password: "hello",

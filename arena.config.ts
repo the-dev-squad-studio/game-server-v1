@@ -1,7 +1,7 @@
 import express from "express";
 import expressify from "uwebsockets-express"
 import { createServer } from "http";
-import { Client, Server } from "@colyseus/core";
+import { Client, Room, Server } from "@colyseus/core";
 import { WebSocketTransport } from "@colyseus/ws-transport"
 import { uWebSocketsTransport } from "@colyseus/uwebsockets-transport"
 import { NewLobbyRoom } from "./Rooms/LobbyRoom/LobbyRoom";
@@ -13,6 +13,20 @@ import { MainMenuRoom } from "./Rooms/MainMenuRoom/MainMenuRoom";
 import {default as Arena} from "@colyseus/arena"
 import {monitor} from "@colyseus/monitor"
 
+export let allGamerooms:Map<string, Room> = new Map<string, Room>();
+export let reservedRooms:Map<string, number> = new Map<string, number>();
+
+function GetFreeSeatForGameRoom():number {
+  let total = 0;
+  let max = CONFIG.GetMaxPlayerCount()
+  allGamerooms.forEach((value: Room, key: string) => {
+    total += value.clients.length;
+  });
+  reservedRooms.forEach((value: number, key: string) => {
+    total += value;
+  });
+  return max - total
+}
 
 let ArenaData = {
   getId: () => "Your Colyseus App",
@@ -32,6 +46,22 @@ let ArenaData = {
        */
       app.get("/", (req, res)=>{
         res.send(Math.round(process.uptime()) + "")
+      })
+      app.get("/book_gameroom", (req, res)=>{
+        let uid = req.query.uid + "";
+        let size = parseInt(req.query.size + "");
+        let result = "false"
+        if(GetFreeSeatForGameRoom() - size > 0){
+          result = "true"
+          reservedRooms.set(uid, size)
+        }
+        res.send(result)
+
+        setTimeout(() => {
+          if(reservedRooms.has(uid + "")){
+            reservedRooms.delete(uid);
+          }
+        }, 30000);
       })
       app.use("/colyseus", monitor());
       
@@ -54,16 +84,19 @@ let ArenaData = {
 
 module.exports = Arena(ArenaData);
 
+if(process.env.NOT_LOCAL != "true") {
 
-let eApp = express()
+  let eApp = express()
+  eApp.use(express.json());
 
-let gameserver = new Server({
-  transport: new WebSocketTransport({
+  const gameServer = new Server({
+    server: createServer(eApp)
+  });
 
-  })
-})
+  ArenaData.initializeExpress(eApp)
+  ArenaData.initializeGameServer(gameServer)
 
-ArenaData.initializeExpress(eApp)
-ArenaData.initializeGameServer(gameserver)
 
-if(process.env.NOT_LOCAL != "true") gameserver.listen(parseInt(process.env.PORT) || 3000).then(()=> console.log("Gameserver started with : " + `MAX_PLAYER_COUNT:${CONFIG.GetMaxPlayerCount()}`));
+
+  gameServer.listen(parseInt(process.env.PORT) || 3000).then(()=> console.log("Gameserver started with : " + `MAX_PLAYER_COUNT:${CONFIG.GetMaxPlayerCount()}`));
+}
