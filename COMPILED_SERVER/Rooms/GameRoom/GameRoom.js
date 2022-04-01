@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GameRoom = void 0;
 const colyseus_1 = require("colyseus");
-const arena_config_1 = require("../../arena.config");
+const Data_1 = require("../../Data");
 const NETMessageSystem_1 = require("../../Global/NETMessageSystem");
 const GamePlayer_1 = require("../../States/GameRoomState/GamePlayer");
 const GameRoomState_1 = require("../../States/GameRoomState/GameRoomState");
@@ -12,9 +12,9 @@ const SyncPlayerGameData_1 = require("./SyncPlayerGameData");
 const SyncPlayerStateComponent_1 = require("./SyncPlayerStateComponent");
 class GameRoom extends colyseus_1.Room {
     onCreate(options) {
-        arena_config_1.allGamerooms.set(this.roomId, this);
-        arena_config_1.reservedRooms.delete(options.uid);
-        this.setPatchRate(10);
+        Data_1.allGamerooms.set(this.roomId, this);
+        Data_1.reservedRooms.delete(options.uid);
+        this.setPatchRate(30);
         this.setState(new GameRoomState_1.GameRoomState());
         this.state.gameData.gameTime = options.gameTime;
         this.netMessageSystem = new NETMessageSystem_1.NETMessageSystem(this);
@@ -76,7 +76,7 @@ class GameRoom extends colyseus_1.Room {
         }, consented ? 0 : 10000);
     }
     onDispose() {
-        arena_config_1.allGamerooms.delete(this.roomId);
+        Data_1.allGamerooms.delete(this.roomId);
         console.log("room", this.roomId, "disposing...");
     }
 }

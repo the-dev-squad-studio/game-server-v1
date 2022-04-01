@@ -1,5 +1,5 @@
 import { Client, Room } from "colyseus";
-import { allGamerooms, reservedRooms } from "../../arena.config";
+import { allGamerooms, reservedRooms } from "../../Data";
 import { IClientMessage } from "../../Global/GameRoomInterfaces";
 import { NETMessageSystem } from "../../Global/NETMessageSystem";
 import { GamePlayerData } from "../../States/GameRoomState/GamePlayer";
@@ -16,7 +16,7 @@ export class GameRoom extends Room<GameRoomState>{
     onCreate (options: {playerName:string, playerColor:string, maxHealth:number, gameTime:number, uid:string}) {
         allGamerooms.set(this.roomId, this);
         reservedRooms.delete(options.uid)
-        this.setPatchRate(10);
+        this.setPatchRate(30);
         this.setState(new GameRoomState());
         this.state.gameData.gameTime = options.gameTime;
         this.netMessageSystem = new NETMessageSystem(this);

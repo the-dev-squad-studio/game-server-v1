@@ -32,7 +32,7 @@ class StartGameComponent {
     }
     GetRandomSeed() {
         let seedRange = 2147483647;
-        //return this.GetRandomInt(-seedRange, seedRange);
+        return this.GetRandomInt(-seedRange, seedRange);
         return 55555;
     }
     GetRandomInt(min, max) {

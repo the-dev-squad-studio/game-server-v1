@@ -4,7 +4,7 @@ exports.CONFIG = void 0;
 exports.CONFIG = {
     maintenance: false,
     GetMaxPlayerCount() {
-        return parseInt(process.env.MAX_PLAYER_COUNT) || 500;
+        return parseInt(process.env.MAX_PLAYER_COUNT) || 100;
     },
     noUserExistCheck: true,
     password: "hello",

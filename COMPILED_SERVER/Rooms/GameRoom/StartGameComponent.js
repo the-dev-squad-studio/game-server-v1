@@ -15,7 +15,7 @@ class StartGameRoomGameComponent {
                 room.clients[i].send("START", count);
                 count++;
             }
-        }, 5000);
+        }, 7500);
         this.Tick(room);
     }
     GameOver(room) {
