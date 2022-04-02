@@ -89,7 +89,7 @@ if(!process.env.NOT_LOCAL) {
   eApp.use(express.json());
 
   const gameServer = new Server({
-    server: createServer(eApp)
+    server: createServer(eApp),
   });
 
   ArenaData.initializeExpress(eApp)
